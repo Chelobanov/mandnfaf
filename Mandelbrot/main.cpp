@@ -1,6 +1,7 @@
 #include "Mandelbrot.h"
 #include "Julia.h"
 #include "RandomString.h"
+#include <iostream>
 
 int main ()
 {
@@ -104,7 +105,7 @@ int main ()
 
                     if (event.key.code == sf::Keyboard::Enter)
                     {
-                        m.colorScheme = 1 - m.colorScheme;
+                        m.colorScheme = 0;
                         m.Recalc();
                     }
 
@@ -114,6 +115,30 @@ int main ()
                         screenshot.create(1800, 1800);
                         screenshot.update(m.window);
                         screenshot.copyToImage().saveToFile("../Images/" + RandomString(7) + ".png");
+                    }
+
+                    if (event.key.code == 26)
+                    {
+                        m.colorScheme = 0;
+                        m.Recalc();
+                    }
+
+                    if (event.key.code == 27)
+                    {
+                        m.colorScheme = 1;
+                        m.Recalc();
+                    }
+
+                    if (event.key.code == 28)
+                    {
+                        m.colorScheme = 2;
+                        m.Recalc();
+                    }
+
+                    if (event.key.code == 29)
+                    {
+                        m.colorScheme = 3;
+                        m.Recalc();
                     }
 
                     break;

@@ -41,6 +41,8 @@ Julia.h
 /Users/reydell/Desktop/Mandelbrot/Julia.h
 RandomString.h
 /Users/reydell/Desktop/Mandelbrot/RandomString.h
+iostream
+-
 
 /usr/local/include/SFML/Config.hpp
 TargetConditionals.h

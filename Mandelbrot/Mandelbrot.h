@@ -29,6 +29,8 @@ public:
 
     void CalculateMT(int start, int end);  // Calculates points for one strip windowWidth * [some height]
     void TolerantCalculateMT(int start, int end);  // Rainbow
+    void CalculateMT_2(int start, int end);
+    void CalculateMT_3(int start, int end);
 
     void RunCalculation();  // Sets up threads for each strip
     void Recalc();  // Joins threads and calls RunCalculation()
