@@ -141,6 +141,24 @@ int main ()
                         m.Recalc();
                     }
 
+                    if (event.key.code == 30)
+                    {
+                        m.colorScheme = 4;
+                        m.Recalc();
+                    }
+
+                    if (event.key.code == 35)
+                    {
+                        jul.colorScheme = 1;
+                        jul.Recalc();
+                    }
+
+                    if (event.key.code == 34)
+                    {
+                        jul.colorScheme = 2;
+                        jul.Recalc();
+                    }
+
                     break;
                 }
             }

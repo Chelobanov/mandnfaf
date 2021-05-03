@@ -3,6 +3,7 @@
 //
 
 #include "Mandelbrot.h"
+#include <cmath> ///
 
 Mandelbrot::Mandelbrot ()
 {
@@ -135,6 +136,11 @@ void Mandelbrot::RunCalculation ()
             case 3:
             {
                 t = std::thread(&Mandelbrot::CalculateMT_3, this, start, end);
+                break;
+            }
+            case 4:
+            {
+                t = std::thread(&Mandelbrot::CalculateMT_smooth, this, start, end);
                 break;
             }
         }
@@ -290,6 +296,46 @@ void Mandelbrot::CalculateMT_3 (int start, int end)
             }
 
             image.setPixel(x, y, sf::Color(r, g, b));
+        }
+    }
+}
+
+void Mandelbrot::CalculateMT_smooth (int start, int end)
+{
+    for (int x = 0; x < windowWidth; x++)
+    {
+        for (int y = start; y < end; y++)
+        {
+            auto X = static_cast<double>(x), Y = static_cast<double>(y);
+
+            X = X / (windowWidth) * (2 * view) + center_x - view;
+            Y = (windowHeight - Y) / (windowHeight) * (2 * view) + center_y - view;
+
+            double color = 0;
+
+            double x_ = 0, y_ = 0;
+            double x2 = 0, y2 = 0;
+
+            for (int i = 0; i < depth; i++)
+            {
+                y_ = (x_ + x_) * y_ + Y;
+                x_ = x2 - y2 + X;
+                x2 = x_ * x_;
+                y2 = y_ * y_;
+
+                if (x2 + y2 > 4)
+                {
+                    color += 255. / depth * (i + 1 - log2(log(sqrt(x_ * x_ + y_ * y_))));
+                    break;
+                }
+
+                if (i == depth - 1)
+                {
+                    color = 0;
+                }
+            }
+
+            image.setPixel(x, y, sf::Color(color, color, color));
         }
     }
 }

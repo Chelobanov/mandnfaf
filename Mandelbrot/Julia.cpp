@@ -26,7 +26,7 @@ void Julia::Draw ()
     window.draw(sprite);
 }
 
-void Julia::CalculateMT (int start, int end)
+void Julia::CalculateMT_2 (int start, int end)
 {
    for (int x = 0; x < windowWidth; x++)
    {
@@ -37,31 +37,72 @@ void Julia::CalculateMT (int start, int end)
            X = X / (windowWidth) * (2 * view) + center_x - view;
            Y = (windowHeight - Y) / (windowHeight) * (2 * view) + center_y - view;
 
-           double color = 0;
+           double color = 200;
 
            double x_ = X, y_ = Y;
-           double xTemp, yTemp;
+           double xTemp;
 
            for (int i = 0; i < depth; i++)
            {
-               xTemp = x_;
-               yTemp = y_;
-               x_ = xTemp * xTemp - yTemp * yTemp + currentPoint.x;
-               y_ = yTemp * xTemp + currentPoint.y;
+                xTemp = x_ * x_ - y_ * y_;
+                y_ = 2 * x_ * y_ + currentPoint.y;
+                x_ = xTemp + currentPoint.x;
 
-               if (x_ + y_ > 4)
+               if (x_ * x_ + y_ * y_ > 4)
                {
                    break;
                }
 
-               color += 255. / depth;
+               color -= 200. / depth;
+
+               if (i == depth - 1)
+               {
+                   color = 200.;
+               }
            }
 
-           image.setPixel(x, y, sf::Color(0, color, 0, 128));
+           image.setPixel(x, y, sf::Color(255, 255, 0, color));
 
        }
    }
 }
+
+void Julia::CalculateMT (int start, int end)
+{
+    for (int x = 0; x < windowWidth; x++)
+    {
+        for (int y = start; y < end; y++)
+        {
+            auto X = static_cast<double>(x), Y = static_cast<double>(y);
+
+            X = X / (windowWidth) * (2 * view) + center_x - view;
+            Y = (windowHeight - Y) / (windowHeight) * (2 * view) + center_y - view;
+
+            double color = 0;
+
+            double x_ = X, y_ = Y;
+            double xTemp;
+
+            for (int i = 0; i < depth; i++)
+            {
+                xTemp = x_ * x_ - y_ * y_;
+                y_ = 2 * x_ * y_ + currentPoint.y;
+                x_ = xTemp + currentPoint.x;
+
+                if (x_ * x_ + y_ * y_ > 4)
+                {
+                    break;
+                }
+
+                color += 200. / depth;
+            }
+
+            image.setPixel(x, y, sf::Color(0, 255, 255, color));
+
+        }
+    }
+}
+
 
 void Julia::RunCalculation ()
 {
@@ -70,8 +111,19 @@ void Julia::RunCalculation ()
 
     for (auto& t : threads)
     {
-        t = std::thread(&Julia::CalculateMT, this, start, end);
-
+        switch (colorScheme)
+        {
+            case 1:
+            {
+                t = std::thread(&Julia::CalculateMT, this, start, end);
+                break;
+            }
+            case 2:
+            {
+                t = std::thread(&Julia::CalculateMT_2, this, start, end);
+                break;
+            }
+        }
         start = end;
         end += windowHeight / threadCount;
     }
@@ -109,3 +161,4 @@ void Julia::Recalc ()
 {
     RunCalculation();
 }
+

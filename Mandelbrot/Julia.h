@@ -25,12 +25,15 @@ public:
 
     sf::Vector2<double> currentPoint;
 
+    int colorScheme = 1;
+
 public:
     explicit Julia (sf::RenderWindow& w);
 
     void SetCurrentPoint();  // Sets the point for Julia set calculation based on mouse position
 
     void CalculateMT(int start, int end);
+    void CalculateMT_2(int start, int end);
 
     void RunCalculation();
     void Recalc();
